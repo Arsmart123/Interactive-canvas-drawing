@@ -52,6 +52,9 @@
 
 
 </body>
+    
+// 正常此处的script应该在上方的，可如果那样的话Chrome会报错，会load不出来getContext。根据CSDN老哥的建议，
+//将位置改到此处，就可以运行了。似乎原来的错误是Chrome会先读取JS再读取HTML，顺序不对造成的错误。CSDN的帖子链接如下：https://blog.csdn.net/Guo1009/article/details/109096402?spm=1001.2014.3001.5501
 <script type="text/javascript">
     var paintcanvas = document.getElementById("canvas1");
     var context = paintcanvas.getContext("2d");
