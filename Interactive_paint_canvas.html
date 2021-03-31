@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+
+    <style type="text/css">
+        canvas {
+            border: 1px solid gray;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <h1>Paint Your Own Picture</h1>
+
+    <p>
+        Set width
+
+        <input type="text" onchange="setWidth(this.value)">
+        Set Height
+        <input type="text" onchange="setHeight(this.value)">
+    </p>
+    <!-- <div id = "2211a"> -->
+
+    <canvas id="canvas1" onmousedown="startPaint()" onmousemove="doPaint(event.offsetX,event.offsetY)"
+        onmouseup="endPaint()">
+    </canvas>
+
+    <p>
+        Brush color
+        <input type="color" value="#010002" id="clr" onchange="changeColor(this.value)">
+
+    <form oninput="sizeOutput.value=sizeIutput.value">
+
+        <input type="range" min="1" max="50" value="1" name="a" id="sizeIutput" oninput="resizeBrush(this.value)">
+
+        <!-- <output name="result">1</output> -->
+        <output id="sizeOutput">1</output>
+
+        </p>
+
+        <p>
+            <input type="button" id="clear" value="Clear Canvas" onclick="clearCanvas()">
+        </p>
+
+
+</body>
+<script type="text/javascript">
+    var paintcanvas = document.getElementById("canvas1");
+    var context = paintcanvas.getContext("2d");
+    var color = 'black';
+    var radius = 10;
+    // only paint if mouse is  being dragged (moved while the button is pressed)
+    var isPainting = false;
+    // 大概这些就是全局变量，比如此处的radius后面都可以用.
+
+
+    function resizeBrush(newRadius) {
+        var can1 = document.getElementById("canvas1");
+        var sizeinput = document.getElementById("sizeOutput");
+        var sizeinput1 = sizeinput.value;
+        radius = sizeinput1;
+    }
+
+
+
+    function setWidth(value) {
+        var canElement = document.getElementById("canvas1");
+        if (isNumeric(value) == true) {
+            canElement.width = value;
+            // 可以得知，此处虽然没有return，但是其实已经将width值存储到。。全局，里面了？反正外部知晓了这个操作并起了作用
+        }
+    }
+
+
+    function setHeight(value) {
+        var canElement = document.getElementById("canvas1");
+        if (isNumeric(value) == true) {
+            canElement.height = value;
+        }
+    }
+
+    function clearCanvas() {
+        context.clearRect(0, 0, paintcanvas.width, paintcanvas.height);
+    }
+
+
+    function startPaint() {
+        isPainting = true;
+    }
+    // 我曾经尝试将isPainting当做函数内的变量再return到HTML再传递到doPaint里去，但是失败了，好复杂，尤其是不知道怎么在onmouse-down/move/up三个属性中区分各自的返回值。最后这个能成功，是利用了设置在JS中的全局变量isPainting。这样还避免了start和end返回值不一样不好判断的情况。值得学习！
+    function endPaint() {
+        isPainting = false;
+    }
+
+
+    function doPaint(x, y) {
+        if (isPainting == true) {
+            paintCircle(x, y);
+        }
+    }
+
+
+    function paintCircle(x, y) {
+        // make sure to start a new circle each time
+        context.beginPath();
+        // draw circle using a complete (2*PI) arc around given point
+        context.arc(x, y, radius, 0, Math.PI * 2, true);
+        context.fillStyle = color;
+        context.fill();
+    }
+    // verify the given value is actually a number
+    function isNumeric(value) {
+        // standard JavaScript function to determine whether a string is an illegal number (Not-a-Number)
+        return !isNaN(value);
+    }
+
+    function changeColor() {
+        var can2 = document.getElementById("canvas1");
+        var colorinput = document.getElementById("clr");
+        var color1 = colorinput.value;
+        color = color1;
+    }
+
+
+
+</script>
+</html>
